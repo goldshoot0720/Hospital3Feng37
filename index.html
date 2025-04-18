@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Hospital Management</h1>
+        
+        <h2>醫院資料</h2>
+        <table id="hospitalDataTable">
+            <thead>
+                <tr>
+                    <th>醫院</th>
+                    <th>醫師</th>
+                    <th>處方簽一</th>
+                    <th>處方簽二</th>
+                    <th>回診日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <h2>CRUD</h2>
+
+        <form id="hospitalForm">
+            <label for="hospital">醫院：</label>
+            <input type="text" id="hospital" name="hospital" required><br>
+            
+            <label for="doctor">醫師：</label>
+            <input type="text" id="doctor" name="doctor" required><br>
+
+            <label for="prescription1">處方簽一日期：</label>
+            <input type="date" id="prescription1" name="prescription1" required><br>
+
+            <label for="prescription2">處方簽二日期：</label>
+            <input type="date" id="prescription2" name="prescription2" required><br>
+
+            <label for="prescription3">回診日期：</label>
+            <input type="date" id="prescription3" name="prescription3" required><br>
+
+            <button type="submit">新增</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

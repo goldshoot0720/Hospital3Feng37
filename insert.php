@@ -1,6 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+header('Content-Type: text/plain; charset=utf-8');
 
 $servername = "sql308.infinityfree.com";
 $username = "if0_38773595";
@@ -9,6 +10,7 @@ $dbname = "if0_38773595_feng2025";
 
 // 建立連線
 $conn = new mysqli($servername, $username, $password, $dbname);
+$conn->set_charset("utf8mb4");
 
 // 檢查連線
 if ($conn->connect_error) {

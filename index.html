@@ -3,173 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Flow Console</title>
-    <meta name="description" content="Hospital Flow Console 提供院所、醫師與處方追蹤的現代化管理介面。">
+    <title>Hospital Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="page-shell">
-        <header class="hero">
+        <header class="hero-panel">
             <div class="hero-copy">
-                <p class="eyebrow">Hospital Operations / 2026 Interface</p>
-                <h1>以更冷靜、精準的節奏管理院所與處方時程</h1>
-                <p class="hero-text">
-                    專為需要快速查看院所、醫師與回診節點的工作情境設計。重點資訊先浮現，輸入流程壓縮到最短，
-                    讓每日追蹤更像控制台，而不是傳統表格。
-                </p>
-                <div class="hero-actions">
-                    <a class="primary-action" href="#record-form">新增排程</a>
-                    <a class="secondary-action" href="#records-section">檢視紀錄</a>
-                </div>
+                <p class="eyebrow">Medical Data Console</p>
+                <h1>Hospital Management</h1>
+                <p class="hero-subtitle">醫院資料</p>
             </div>
-
-            <aside class="hero-panel">
-                <p class="panel-label">Operational Pulse</p>
-                <div class="pulse-grid">
-                    <div>
-                        <span>今日狀態</span>
-                        <strong id="todayStatus">資料同步中</strong>
-                    </div>
-                    <div>
-                        <span>風險提醒</span>
-                        <strong id="riskStatus">分析中</strong>
-                    </div>
-                </div>
-                <p class="panel-footnote">介面會自動依處方日期辨識即將到期與逾期項目。</p>
-            </aside>
+            <div class="hero-grid" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </header>
 
-        <main class="dashboard">
-            <section class="stats-grid" aria-label="資料摘要">
-                <article class="stat-card accent">
-                    <span class="stat-label">總筆數</span>
-                    <strong class="stat-value" id="totalRecords">0</strong>
-                    <p class="stat-note">目前已載入的院所追蹤資料</p>
-                </article>
-                <article class="stat-card">
-                    <span class="stat-label">七日內到期</span>
-                    <strong class="stat-value" id="dueSoonCount">0</strong>
-                    <p class="stat-note">需要優先聯繫或確認的排程</p>
-                </article>
-                <article class="stat-card">
-                    <span class="stat-label">已逾期</span>
-                    <strong class="stat-value" id="overdueCount">0</strong>
-                    <p class="stat-note">處方日期已落後今天的紀錄</p>
-                </article>
-                <article class="stat-card">
-                    <span class="stat-label">最近節點</span>
-                    <strong class="stat-value" id="nextDate">-</strong>
-                    <p class="stat-note">下一個最接近的處方日期</p>
-                </article>
+        <main class="layout-grid">
+            <section class="panel panel-table">
+                <div class="panel-header">
+                    <h2>醫院資料</h2>
+                </div>
+
+                <div class="table-shell">
+                    <table id="hospitalDataTable">
+                        <thead>
+                            <tr>
+                                <th>醫院</th>
+                                <th>醫師</th>
+                                <th>處方簽一</th>
+                                <th>處方簽二</th>
+                                <th>回診日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
-            <section class="content-grid">
-                <section class="records-panel" id="records-section">
-                    <div class="section-heading">
-                        <div>
-                            <p class="section-kicker">Records View</p>
-                            <h2>診療追蹤總覽</h2>
-                        </div>
-                        <div class="toolbar">
-                            <label class="search-field" for="searchInput">
-                                <span>搜尋院所或醫師</span>
-                                <input type="search" id="searchInput" placeholder="例如：台大醫院 / 王醫師">
-                            </label>
-                            <label class="filter-field" for="statusFilter">
-                                <span>狀態篩選</span>
-                                <select id="statusFilter">
-                                    <option value="all">全部</option>
-                                    <option value="attention">七日內到期</option>
-                                    <option value="overdue">已逾期</option>
-                                    <option value="stable">穩定</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
+            <section class="panel panel-form">
+                <div class="panel-header">
+                    <h2>CRUD</h2>
+                </div>
 
-                    <div class="table-shell">
-                        <table id="hospitalDataTable">
-                            <thead>
-                                <tr>
-                                    <th>院所</th>
-                                    <th>醫師</th>
-                                    <th>處方 A</th>
-                                    <th>處方 B</th>
-                                    <th>回診 / 追蹤</th>
-                                    <th>狀態</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                <form id="hospitalForm">
+                    <label for="hospital">醫院：</label>
+                    <input type="text" id="hospital" name="hospital" required>
 
-                    <div class="mobile-cards" id="mobileCards" aria-live="polite"></div>
-                    <div class="empty-state" id="emptyState" hidden>
-                        <p>目前沒有符合條件的紀錄。調整搜尋條件或新增一筆新的排程。</p>
-                    </div>
-                </section>
+                    <label for="doctor">醫師：</label>
+                    <input type="text" id="doctor" name="doctor" required>
 
-                <aside class="side-column">
-                    <section class="insight-panel">
-                        <div class="section-heading compact">
-                            <div>
-                                <p class="section-kicker">Insight</p>
-                                <h2>即時觀測</h2>
-                            </div>
-                        </div>
-                        <ul class="insight-list" id="insightList">
-                            <li>正在整理資料狀態...</li>
-                        </ul>
-                    </section>
+                    <label for="prescription1">處方簽一日期：</label>
+                    <input type="date" id="prescription1" name="prescription1" required>
 
-                    <section class="form-panel" id="record-form">
-                        <div class="section-heading compact">
-                            <div>
-                                <p class="section-kicker">Quick Entry</p>
-                                <h2 id="formTitle">新增診療紀錄</h2>
-                            </div>
-                        </div>
+                    <label for="prescription2">處方簽二日期：</label>
+                    <input type="date" id="prescription2" name="prescription2" required>
 
-                        <form id="hospitalForm">
-                            <div class="field-grid">
-                                <label for="hospital">
-                                    <span>院所名稱</span>
-                                    <input type="text" id="hospital" name="hospital" placeholder="輸入醫院或診所名稱" required>
-                                </label>
+                    <label for="prescription3">回診日期：</label>
+                    <input type="date" id="prescription3" name="prescription3" required>
 
-                                <label for="doctor">
-                                    <span>主責醫師</span>
-                                    <input type="text" id="doctor" name="doctor" placeholder="輸入醫師姓名" required>
-                                </label>
-
-                                <label for="prescription1">
-                                    <span>處方 A 日期</span>
-                                    <input type="date" id="prescription1" name="prescription1" required>
-                                </label>
-
-                                <label for="prescription2">
-                                    <span>處方 B 日期</span>
-                                    <input type="date" id="prescription2" name="prescription2" required>
-                                </label>
-
-                                <label for="prescription3" class="field-span">
-                                    <span>回診 / 追蹤日期</span>
-                                    <input type="date" id="prescription3" name="prescription3" required>
-                                </label>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="primary-button" id="submitButton">儲存紀錄</button>
-                                <button type="button" class="ghost-button" id="cancelEditButton" hidden>取消編輯</button>
-                            </div>
-                            <p class="form-hint" id="formHint">輸入完成後會即時刷新右側紀錄與摘要。</p>
-                        </form>
-                    </section>
-                </aside>
+                    <button type="submit" id="submitButton">新增</button>
+                </form>
             </section>
         </main>
     </div>

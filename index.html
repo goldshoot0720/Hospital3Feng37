@@ -27,8 +27,18 @@
 
         <main class="layout-grid">
             <section class="panel panel-table">
-                <div class="panel-header">
-                    <h2>醫院資料</h2>
+                <div class="panel-header panel-header-stack">
+                    <div>
+                        <h2>醫院資料</h2>
+                        <p class="panel-note">保留原本資料內容，補上更順手的檢視與操作體驗。</p>
+                    </div>
+                    <div class="toolbar">
+                        <label class="toolbar-field" for="searchInput">
+                            <span>搜尋</span>
+                            <input type="search" id="searchInput" placeholder="搜尋醫院或醫師">
+                        </label>
+                        <button type="button" class="toolbar-button" id="sortButton" data-sort="asc">日期排序：舊到新</button>
+                    </div>
                 </div>
 
                 <div class="table-shell">
@@ -48,6 +58,9 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="mobile-cards" id="mobileCards"></div>
+                <p class="empty-state" id="emptyState" hidden>目前沒有符合搜尋條件的資料。</p>
             </section>
 
             <section class="panel panel-form">
@@ -55,7 +68,7 @@
                     <h2>CRUD</h2>
                 </div>
 
-                <form id="hospitalForm">
+                <form id="hospitalForm" novalidate>
                     <label for="hospital">醫院：</label>
                     <input type="text" id="hospital" name="hospital" required>
 
@@ -71,11 +84,14 @@
                     <label for="prescription3">回診日期：</label>
                     <input type="date" id="prescription3" name="prescription3" required>
 
+                    <p class="form-status" id="formStatus" aria-live="polite">請輸入完整資料後送出。</p>
                     <button type="submit" id="submitButton">新增</button>
                 </form>
             </section>
         </main>
     </div>
+
+    <div class="toast" id="toast" hidden></div>
 
     <script src="script.js"></script>
 </body>

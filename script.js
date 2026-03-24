@@ -80,10 +80,17 @@ function renderRows() {
             <td>${escapeHtml(row.prescription1)}</td>
             <td>${escapeHtml(row.prescription2)}</td>
             <td>${escapeHtml(row.prescription3)}</td>
-            <td><button type="button" class="table-action">編輯</button></td>
+            <td>
+                <div class="action-group">
+                    <button type="button" class="table-action">編輯</button>
+                    <button type="button" class="table-action danger">刪除</button>
+                </div>
+            </td>
         `;
 
-        newRow.querySelector(".table-action").addEventListener("click", () => startEdit(index));
+        const [editButton, deleteButton] = newRow.querySelectorAll(".table-action");
+        editButton.addEventListener("click", () => startEdit(index));
+        deleteButton.addEventListener("click", () => deleteRow(index));
 
         const card = document.createElement("article");
         card.className = "mobile-card";
@@ -93,9 +100,15 @@ function renderRows() {
             <p>處方簽一：${escapeHtml(row.prescription1)}</p>
             <p>處方簽二：${escapeHtml(row.prescription2)}</p>
             <p>回診日期：${escapeHtml(row.prescription3)}</p>
-            <button type="button" class="table-action">編輯</button>
+            <div class="action-group">
+                <button type="button" class="table-action">編輯</button>
+                <button type="button" class="table-action danger">刪除</button>
+            </div>
         `;
-        card.querySelector(".table-action").addEventListener("click", () => startEdit(index));
+
+        const [mobileEditButton, mobileDeleteButton] = card.querySelectorAll(".table-action");
+        mobileEditButton.addEventListener("click", () => startEdit(index));
+        mobileDeleteButton.addEventListener("click", () => deleteRow(index));
         mobileCards.appendChild(card);
     });
 
@@ -150,11 +163,12 @@ function validateForm(values) {
 
     fields.forEach((field) => field.classList.remove("invalid"));
 
-    Object.entries(values).forEach(([key, value], index) => {
+    fields.forEach((field, index) => {
+        const value = Object.values(values)[index];
         if (!value) {
-            fields[index].classList.add("invalid");
+            field.classList.add("invalid");
             if (!firstInvalidField) {
-                firstInvalidField = fields[index];
+                firstInvalidField = field;
             }
         }
     });
@@ -211,6 +225,55 @@ function fillForm(rowData) {
     submitButton.textContent = "更新";
     setFormStatus("已帶入資料，可以直接更新。", "");
     document.getElementById("hospital").focus();
+}
+
+function deleteRow(index) {
+    const row = allRows[index];
+    if (!row) {
+        return;
+    }
+
+    const confirmed = window.confirm(`確定要刪除 ${row.hospital} / ${row.doctor} 這筆資料嗎？`);
+    if (!confirmed) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("hospital", row.hospital);
+    formData.append("doctor", row.doctor);
+    formData.append("prescription1", row.prescription1);
+    formData.append("prescription2", row.prescription2);
+    formData.append("prescription3", row.prescription3);
+
+    fetch("delete.php", {
+        method: "POST",
+        body: formData
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            if (!result.success) {
+                throw new Error("Delete failed");
+            }
+
+            allRows.splice(index, 1);
+
+            if (editingIndex === index) {
+                editingIndex = null;
+                form.reset();
+                submitButton.textContent = "新增";
+            } else if (editingIndex !== null && editingIndex > index) {
+                editingIndex -= 1;
+            }
+
+            renderRows();
+            setFormStatus("資料已刪除。", "success");
+            showToast("刪除成功", "success");
+        })
+        .catch((error) => {
+            console.error("刪除失敗：", error);
+            setFormStatus("資料刪除失敗，請稍後重試。", "error");
+            showToast("刪除失敗", "error");
+        });
 }
 
 function toggleSort() {

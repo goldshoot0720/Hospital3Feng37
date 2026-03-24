@@ -309,6 +309,18 @@ button:hover,
     box-shadow: none;
 }
 
+.action-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.table-action.danger {
+    color: #ffd8df;
+    border-color: rgba(255, 125, 149, 0.26);
+    background: rgba(55, 12, 24, 0.88);
+}
+
 .form-status {
     margin: 4px 0 0;
     min-height: 24px;
